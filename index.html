@@ -24,6 +24,39 @@
       border-radius: 0.25rem; /* Rounded corners */
       font-size: 14px; /* Font size */
     }
+    
+    /* Loading spinner */
+    .loader {
+      border: 4px solid rgba(255, 255, 255, 0.3); /* Border style */
+      border-radius: 50%; /* Rounded shape */
+      border-top: 4px solid #ffffff; /* White top border */
+      width: 30px; /* Width */
+      height: 30px; /* Height */
+      animation: spin 1s linear infinite; /* Animation */
+      margin: auto; /* Center align */
+      margin-top: 20px; /* Space above loader */
+    }
+    
+    /* Keyframes for spinner animation */
+    @keyframes spin {
+      0% { transform: rotate(0deg); } /* Start position */
+      100% { transform: rotate(360deg); } /* End position */
+    }
+    
+    /* Hide submit button when loading */
+    .submit-btn-loading {
+      display: none; /* Hide by default */
+    }
+    
+    /* Show loading spinner and hide submit button */
+    .submitting .submit-btn-loading {
+      display: inline-block; /* Show when submitting */
+    }
+    
+    .submitting .btn-submit {
+      display: none; /* Hide button when submitting */
+    }
+
   </style>
 </head>
 
@@ -79,6 +112,7 @@
           <p style="color: white;">Register and Activate your Green Instant pack</p>
           <form  id="registrationForm">
 
+            <div id="loader"></div>
             <div id="errorContainer" class="alert alert-danger mt-3" style="display: none;"></div>
 
 
@@ -247,9 +281,16 @@ s0.parentNode.insertBefore(s1,s0);
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('registrationForm');
   const errorContainer = document.getElementById('errorContainer');
+  const loader = document.createElement('div');
+  loader.className = 'loader';
 
   form.addEventListener('submit', function(event) {
     event.preventDefault();
+
+    // Show loading state
+    form.classList.add('submitting');
+    submitButton.disabled = true;
+    submitButton.insertAdjacentElement('afterend', loader);
 
     const formData = new FormData(form);
 
@@ -280,6 +321,12 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(error => {
       console.error('Error submitting the form:', error);
       showError('There was an error submitting the form. Please try again later.');
+    })
+    .finally(() => {
+      // Hide loading state
+      form.classList.remove('submitting');
+      submitButton.disabled = false;
+      loader.remove();
     });
   });
 
