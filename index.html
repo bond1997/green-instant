@@ -13,6 +13,18 @@
   <link href="css/all.css" rel="stylesheet">
   <!-- Custom styles for this template -->
   <link href="css/style.css" rel="stylesheet">
+  <style>
+    #errorContainer {
+      display: none; /* Hide error container by default */
+      background-color: #f8d7da; /* Light red background */
+      color: #721c24; /* Dark red text color */
+      padding: 0.75rem 1.25rem; /* Padding inside the error container */
+      margin-top: 10px; /* Space above the error container */
+      border: 1px solid #f5c6cb; /* Red border */
+      border-radius: 0.25rem; /* Rounded corners */
+      font-size: 14px; /* Font size */
+    }
+  </style>
 </head>
 
 <body style="background-color: rgb(30, 29, 29);">
@@ -65,7 +77,10 @@
           <div style="margin: 25px;">
             <h3 style="color: white;">Register & Activate</h3>
           <p style="color: white;">Register and Activate your Green Instant pack</p>
-          <form action="https://formsubmit.co/8871cf1644d0008b05c5d52a466e1bd7" method="POST">
+          <form  id="registrationForm">
+
+            <div id="errorContainer" class="alert alert-danger mt-3" style="display: none;"></div>
+
 
             <div class="row">
               <div class="col-md-12">
@@ -227,6 +242,54 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('registrationForm');
+  const errorContainer = document.getElementById('errorContainer');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    fetch("https://formsubmit.co/8871cf1644d0008b05c5d52a466e1bd7", {
+      method: "POST",
+      headers: { 
+        'Accept': 'application/json'
+      },
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Check the response data for success or error
+      if (data.success) {
+        // Handle success scenario
+        console.log('Form submitted successfully:', data);
+        // Optionally redirect or show success message
+      } else {
+        // Handle error scenario
+        showError(data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error submitting the form:', error);
+      showError('There was an error submitting the form. Please try again later.');
+    });
+  });
+
+  function showError(message) {
+    errorContainer.textContent = message;
+    errorContainer.style.display = 'block';
+  }
+});
+</script>
+
 </body>
 
 </html>
